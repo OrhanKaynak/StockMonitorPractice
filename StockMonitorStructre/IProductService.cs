@@ -11,5 +11,7 @@ namespace StockMonitorStructre
         List<Product> GetAllProducts();
         List<Product> GetCriticalStock();
         int GetCategoryIdByName(string categoryName);
+        int CreateCategory(string categoryName);
+        bool IsProductExist(string productName);
     }
 }

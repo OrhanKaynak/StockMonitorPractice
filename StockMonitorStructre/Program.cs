@@ -19,37 +19,65 @@ namespace StockMonitorStructre
             string kategoriAdi = "Elektronik";
 
             int catId = productService.GetCategoryIdByName(kategoriAdi);
+            if (catId == 0)
+            {
+                Console.WriteLine($"'{kategoriAdi}' kategorisi bulunamadı. Otomatik oluşturuluyor...");
+                catId = productService.CreateCategory(kategoriAdi);
+            }
+
             if (catId > 0)
             {
                 Console.WriteLine($"Kategori bulundu ID: {catId}");
+                if (!productService.IsProductExist("Laptop"))
+                {
+                    productService.AddProduct(new Product
+                    {
+                        CategoryId = catId,
+                        ProductName = "Laptop",
+                        Price = 25000,
+                        StockQuantity = 50,
+                        Status = StockStatus.Active
+                    });
+                }
+                else
+                {
+                    Console.WriteLine("Laptop veri tabanında zaten mevcut.");
+                }
+                if (!productService.IsProductExist("Mouse"))
+                {
+                    productService.AddProduct(new Product
+                    {
+                        CategoryId = catId,
+                        ProductName = "Mouse",
+                        Price = 150,
+                        StockQuantity = 5,
+                        Status = StockStatus.Critical
+                    });
+                }
+                else
+                {
+                    Console.WriteLine("Mouse veri tabanında zaten mevcut");
+                }
+                if (!productService.IsProductExist("Kulaklık"))
+                {
+                    productService.AddProduct(new Product
+                    {
+                        CategoryId = catId,
+                        ProductName = "Kulaklık",
+                        Price = 1500,
+                        StockQuantity = 100,
+                        Status = StockStatus.Active
+                    });
+                }
+                else
+                {
+                    Console.WriteLine("Kulaklık veritabanında zaten mevcut.");
+                }
             }
-
-            productService.AddProduct(new Product
+            else
             {
-                Id = 1,
-                ProductName = "Laptop",
-                Price = 25000,
-                StockQuantity = 50,
-                Status = StockStatus.Active
-            });
-            productService.AddProduct(new Product
-            {
-                Id= 2,
-                ProductName = "Mouse",
-                Price = 150,
-                StockQuantity = 5,
-                Status = StockStatus.Critical
-            });
-
-            productService.AddProduct(new Product
-            {
-                Id = 3,
-                ProductName = "Kulaklık",
-                Price = 1500,
-                StockQuantity = 100,
-                Status = StockStatus.Active
-            });
-
+                Console.WriteLine("HATA! Kategori ne bulunabildi ne de oluşturulabildi!");
+            }
             Console.WriteLine("\n--- Tüm Ürünler ---");
 
             foreach (var item in productService.GetAllProducts())
@@ -59,10 +87,30 @@ namespace StockMonitorStructre
 
             Console.WriteLine("\n--- Kritik Stoktakiler (Metot Testi) ---");
             var criticals = productService.GetCriticalStock();
-            foreach (var item in criticals)
+
+            if (criticals.Count > 0)
             {
-                Console.WriteLine($"Dikkat: {item.ProductName} tükenmek üzere! (Adet: {item.StockQuantity})");
+                foreach (var item in criticals)
+                {
+                    Console.WriteLine($"DİKKAT! {item.ProductName} tükenmek üzere! (Adet: {item.StockQuantity})");
+                }
             }
+            else
+            {
+                Console.WriteLine("Kritik seviyede ürün yok.");
+            }
+
+            Console.WriteLine("\n--- Silme İşlemi (DeleteProduct Testi) ---");
+            int silinecekId = 20;
+            productService.DeleteProduct(silinecekId);
+
+            Console.WriteLine("\n--- Silme işleminden Sonra Son Durum ---");
+
+            foreach (var item in productService.GetAllProducts())
+            {
+                Console.WriteLine($"ID: {item.Id} | {item.ProductName}");
+            }
+
             Console.ReadLine();
         }
     }
@@ -91,6 +139,16 @@ namespace StockMonitorStructre
             Console.WriteLine($"{product.ProductName} başarıyla eklendi.");
         }
 
+        public int CreateCategory(string categoryName)
+        {
+            Console.WriteLine($"[RAM Simülasyonu] '{categoryName}' kategorisi sanal olarak oluşturuldu.");
+            return 1;
+        }
+        
+        public bool IsProductExist(string productName)
+        {
+            return _products.Any(p => p.ProductName == productName);
+        }
         public void DeleteProduct(int id)
         {
             var productToDelete = _products.FirstOrDefault(p => p.Id == id);
