@@ -16,6 +16,14 @@ namespace StockMonitorStructre
         {
             IProductService productService = new SqlProductManager();
 
+            string kategoriAdi = "Elektronik";
+
+            int catId = productService.GetCategoryIdByName(kategoriAdi);
+            if (catId > 0)
+            {
+                Console.WriteLine($"Kategori bulundu ID: {catId}");
+            }
+
             productService.AddProduct(new Product
             {
                 Id = 1,
@@ -31,6 +39,15 @@ namespace StockMonitorStructre
                 Price = 150,
                 StockQuantity = 5,
                 Status = StockStatus.Critical
+            });
+
+            productService.AddProduct(new Product
+            {
+                Id = 3,
+                ProductName = "Kulaklık",
+                Price = 1500,
+                StockQuantity = 100,
+                Status = StockStatus.Active
             });
 
             Console.WriteLine("\n--- Tüm Ürünler ---");
