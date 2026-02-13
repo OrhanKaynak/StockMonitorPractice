@@ -52,6 +52,7 @@ namespace StockMonitorStructre
 
     public class Product : BaseEntity
     {
+        public int CategoryId { get; set; }
         public string ProductName { get; set; }
         public decimal Price { get; set; }
         public int StockQuantity { get; set; }
@@ -96,6 +97,10 @@ namespace StockMonitorStructre
         public List<Product> GetCriticalStock()
         {
             return _products.Where(p => p.StockQuantity < 10).ToList();
+        }
+        public int GetCategoryIdByName(string categoryName)
+        {
+            return 1;
         }
     }
 }

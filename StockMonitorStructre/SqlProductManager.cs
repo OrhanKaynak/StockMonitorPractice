@@ -55,7 +55,7 @@ namespace StockMonitorStructre
 
                 SqlCommand command = new SqlCommand (sqlSorgusu, connection);
 
-                command.Parameters.AddWithValue("@catId", 1);
+                command.Parameters.AddWithValue("@catId", product.CategoryId);
                 command.Parameters.AddWithValue("@name", product.ProductName);
                 command.Parameters.AddWithValue("@price", product.Price);
                 command.Parameters.AddWithValue("@stock", product.StockQuantity);
@@ -74,6 +74,33 @@ namespace StockMonitorStructre
                     Console.WriteLine("Kayıt Hatası!" + ex.Message);
                 }
             }
+        }
+
+        public int GetCategoryIdByName(string categoryName)
+        {
+            int catId = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sql = "SELECT Id FROM Categories Where categoryName = @name";
+                SqlCommand command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@name", categoryName);
+
+                try
+                {
+                    connection.Open();
+                    object result = command.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        catId = (int)result;
+                    }
+                }
+                catch (Exception ex) 
+                {
+                    Console.WriteLine("Kategori ID bulunurken hata: " + ex.Message);
+                }
+            }
+            return catId;
         }
         public void DeleteProduct(int id) { }
         public List<Product> GetCriticalStock() { return new List<Product>(); }

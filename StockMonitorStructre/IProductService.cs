@@ -10,5 +10,6 @@ namespace StockMonitorStructre
         void DeleteProduct(int id);
         List<Product> GetAllProducts();
         List<Product> GetCriticalStock();
+        int GetCategoryIdByName(string categoryName);
     }
 }
