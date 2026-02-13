@@ -189,7 +189,7 @@ namespace StockMonitorStructre
             List<Product> criticalProducts = new List<Product>();
             using (SqlConnection connection = new SqlConnection(connectionString)) 
             {
-                string sql = "SELECT FROM Products WHERE StockQuantity <= 10";
+                string sql = "SELECT * FROM Products WHERE StockQuantity <= 10";
                 SqlCommand command = new SqlCommand(sql, connection);
 
                 try

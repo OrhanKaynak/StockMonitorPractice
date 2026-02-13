@@ -102,7 +102,7 @@ namespace StockMonitorStructre
 
             Console.WriteLine("\n--- Silme İşlemi (DeleteProduct Testi) ---");
             int silinecekId = 20;
-            productService.DeleteProduct(silinecekId);
+            // productService.DeleteProduct(silinecekId);
 
             Console.WriteLine("\n--- Silme işleminden Sonra Son Durum ---");
 
